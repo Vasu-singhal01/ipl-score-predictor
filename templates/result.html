@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPL Score Predictor - Result</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --green:#1a6b3c;--green-light:#2d9e5f;--green-dark:#0d4a2a;
+  --gold:#f5c518;--gold-dark:#d4a017;
+  --bg:#0a1628;--surface:#0f2040;--card:#162a4a;--border:#1e3a5f;
+  --text:#e8edf5;--muted:#7a90b0;
+}
+body{
+  font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 50%,rgba(26,107,60,0.15) 0%,transparent 60%),
+    radial-gradient(ellipse at 80% 20%,rgba(245,197,24,0.08) 0%,transparent 50%);
+}
+
+.header{
+  background:linear-gradient(135deg,var(--green-dark) 0%,#0a1628 60%);
+  border-bottom:2px solid var(--gold);padding:1.2rem 2rem;
+}
+.header-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 15px rgba(245,197,24,0.3);}
+.logo h1{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:#fff;letter-spacing:1px;}
+.logo p{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.btn-back{background:rgba(245,197,24,0.1);border:1px solid rgba(245,197,24,0.4);color:var(--gold);padding:8px 18px;border-radius:20px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;text-decoration:none;display:inline-block;}
+.btn-back:hover{background:rgba(245,197,24,0.2);}
+
+.main{max-width:900px;margin:2rem auto 3rem;padding:0 1.5rem;}
+
+/* SCORE RESULT */
+.score-hero{
+  background:linear-gradient(135deg, {{ bat_color }}33, {{ bat_color }}11);
+  border:1px solid {{ bat_color }}66;
+  border-radius:20px;padding:2.5rem;text-align:center;
+  margin-bottom:1.5rem;position:relative;overflow:hidden;
+}
+.score-hero::before{
+  content:'🏏';position:absolute;right:2rem;top:50%;transform:translateY(-50%);
+  font-size:5rem;opacity:0.1;
+}
+.score-hero .match-label{
+  font-size:13px;color:var(--muted);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:0.5rem;
+  font-family:'Rajdhani',sans-serif;
+}
+.score-hero .teams{
+  font-family:'Rajdhani',sans-serif;font-size:1.3rem;
+  font-weight:700;color:#fff;margin-bottom:1.5rem;
+}
+.score-hero .teams span{color:var(--gold);}
+.predicted-label{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:0.25rem;}
+.predicted-score{
+  font-family:'Rajdhani',sans-serif;
+  font-size:5rem;font-weight:700;
+  color:var(--gold);line-height:1;
+  text-shadow:0 0 30px rgba(245,197,24,0.4);
+}
+.score-range{
+  font-size:1rem;color:var(--muted);margin-top:0.5rem;
+}
+.score-range strong{color:var(--text);}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:0.95rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+/* MATCH STATS */
+.match-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.mstat{background:var(--surface);border-radius:10px;padding:0.9rem;text-align:center;border:1px solid var(--border);}
+.mstat .mval{font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text);}
+.mstat .mlab{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+
+/* TEAMS CARD */
+.teams-display{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;}
+.team-box{border-radius:12px;padding:1rem;text-align:center;}
+.team-box .t-logo{font-size:2rem;margin-bottom:6px;}
+.team-box .t-name{font-family:'Rajdhani',sans-serif;font-size:0.85rem;font-weight:700;color:#fff;}
+.team-box .t-role{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-top:3px;opacity:0.8;}
+.vs-ball{width:40px;height:40px;background:radial-gradient(circle,#cc2200,#8b0000);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;color:#fff;margin:0 auto;box-shadow:0 4px 12px rgba(204,34,0,0.4);}
+
+/* MODEL COMPARISON */
+.model-table{width:100%;}
+.model-table tr{border-bottom:1px solid var(--border);}
+.model-table tr:last-child{border-bottom:none;}
+.model-table td{padding:10px 8px;font-size:13px;}
+.model-table .model-name{color:var(--text);font-weight:500;}
+.model-table .model-val{color:var(--muted);text-align:right;}
+.best-badge{background:rgba(26,107,60,0.3);color:var(--green-light);font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;font-family:'Rajdhani',sans-serif;}
+
+/* CHART */
+.chart-wrap{position:relative;width:100%;height:220px;}
+
+/* INSIGHT */
+.insight-card{
+  background:linear-gradient(135deg,rgba(26,107,60,0.15),rgba(245,197,24,0.05));
+  border:1px solid rgba(26,107,60,0.4);
+  border-radius:16px;padding:1.25rem 1.5rem;
+  margin-bottom:1.25rem;
+  font-size:15px;line-height:1.7;color:var(--text);
+}
+.insight-card strong{color:var(--gold);}
+
+/* PREDICT AGAIN */
+.btn-predict-again{
+  display:block;width:100%;padding:15px;
+  background:linear-gradient(135deg,var(--green),var(--green-light));
+  color:#fff;border:none;border-radius:12px;
+  font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;text-align:center;
+  text-decoration:none;cursor:pointer;
+  box-shadow:0 4px 15px rgba(26,107,60,0.4);
+  transition:opacity 0.2s;
+}
+.btn-predict-again:hover{opacity:0.9;}
+
+.footer{text-align:center;padding:1.5rem;font-size:12px;color:var(--muted);border-top:1px solid var(--border);font-family:'Rajdhani',sans-serif;letter-spacing:1px;}
+
+@media(max-width:640px){
+  .grid-2{grid-template-columns:1fr;}
+  .match-stats{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🏏</div>
+      <div>
+        <h1>IPL PREDICTOR</h1>
+        <p>Prediction Result</p>
+      </div>
+    </div>
+    <a href="/" class="btn-back">← New Prediction</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Score Result Hero -->
+  <div class="score-hero">
+    <div class="match-label">Predicted Final Score</div>
+    <div class="teams">
+      <span>{{ bat_team }}</span> vs {{ bowl_team }}
+    </div>
+    <div class="predicted-label">Final Score Prediction</div>
+    <div class="predicted-score">{{ predicted }}</div>
+    <div class="score-range">
+      Expected Range: <strong>{{ range_low }} – {{ range_high }} runs</strong>
+    </div>
+  </div>
+
+  <!-- Insight -->
+  <div class="insight-card">
+    {% if crr > 9 %}
+    🔥 <strong>{{ bat_team }}</strong> are scoring at an excellent rate of <strong>{{ crr }}</strong> runs/over.
+    They need to maintain <strong>{{ rrr }}</strong> runs/over in remaining overs to reach the predicted total.
+    {% elif crr > 7 %}
+    📊 <strong>{{ bat_team }}</strong> have a steady run rate of <strong>{{ crr }}</strong>.
+    A required rate of <strong>{{ rrr }}</strong> in the remaining overs is achievable with acceleration.
+    {% else %}
+    ⚠️ <strong>{{ bat_team }}</strong> are scoring slowly at <strong>{{ crr }}</strong> runs/over.
+    They need significant acceleration — required rate is <strong>{{ rrr }}</strong> runs/over.
+    {% endif %}
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Teams Card -->
+    <div class="card">
+      <div class="card-title">Match Details</div>
+      <div class="teams-display">
+        <div class="team-box" style="background:{{ bat_color }}22;border:1px solid {{ bat_color }}55;">
+          <div class="t-logo">{{ bat_logo }}</div>
+          <div class="t-name">{{ bat_short }}</div>
+          <div class="t-role" style="color:{{ bat_color }};">Batting</div>
+        </div>
+        <div class="vs-ball">VS</div>
+        <div class="team-box" style="background:{{ bowl_color }}22;border:1px solid {{ bowl_color }}55;">
+          <div class="t-logo">{{ bowl_logo }}</div>
+          <div class="t-name">{{ bowl_short }}</div>
+          <div class="t-role" style="color:{{ bowl_color }};">Bowling</div>
+        </div>
+      </div>
+      <div class="match-stats" style="margin-top:1rem;">
+        <div class="mstat"><div class="mval">{{ overs }}</div><div class="mlab">Overs</div></div>
+        <div class="mstat"><div class="mval">{{ runs }}</div><div class="mlab">Runs</div></div>
+        <div class="mstat"><div class="mval">{{ wickets }}</div><div class="mlab">Wickets</div></div>
+        <div class="mstat"><div class="mval">{{ runs_last_5 }}</div><div class="mlab">Last 5 Overs</div></div>
+      </div>
+    </div>
+
+    <!-- Run Rate Card -->
+    <div class="card">
+      <div class="card-title">Run Rate Analysis</div>
+      <div class="chart-wrap">
+        <canvas id="rateChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Score Projection + Model Comparison -->
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-title">Score Projection</div>
+      <div class="chart-wrap">
+        <canvas id="scoreChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Model Comparison</div>
+      <table class="model-table">
+        <thead>
+          <tr>
+            <td style="color:var(--muted);font-size:11px;text-transform:uppercase;padding-bottom:8px;">Model</td>
+            <td style="color:var(--muted);font-size:11px;text-transform:uppercase;padding-bottom:8px;text-align:right;">MAE</td>
+            <td style="color:var(--muted);font-size:11px;text-transform:uppercase;padding-bottom:8px;text-align:right;">RMSE</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in model_comparison %}
+          <tr>
+            <td class="model-name">
+              {{ m.name }}
+              {% if loop.index == 1 %}<span class="best-badge">BEST</span>{% endif %}
+            </td>
+            <td class="model-val">{{ m.mae }}</td>
+            <td class="model-val">{{ m.rmse }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div style="margin-top:1.5rem;">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Input Summary</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+          Overs: <span style="color:var(--text);">{{ overs }}</span><br>
+          Runs: <span style="color:var(--text);">{{ runs }}</span><br>
+          Wickets: <span style="color:var(--text);">{{ wickets }}</span><br>
+          Last 5 Overs: <span style="color:var(--text);">{{ runs_last_5 }}</span><br>
+          CRR: <span style="color:var(--gold);">{{ crr }}</span> | RRR: <span style="color:var(--gold);">{{ rrr }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a href="/" class="btn-predict-again">🏏 Predict Another Match</a>
+
+</div>
+
+<div class="footer">
+  IPL Score Predictor · B.Tech CSE (Data Science) · Bennett University · Vasu Singhal
+</div>
+
+<script>
+// Run Rate Chart
+new Chart(document.getElementById('rateChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Current\nRun Rate', 'Required\nRun Rate', 'Predicted\nAvg Rate'],
+    datasets: [{
+      data: [{{ crr }}, {{ rrr }}, ({{ predicted }} / 20).toFixed(2)],
+      backgroundColor: ['#1a6b3c', '#e63946', '#f5c518'],
+      borderWidth: 0,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a90b0', font: { size: 11 } } },
+      x: { grid: { display: false }, ticks: { color: '#7a90b0', font: { size: 10 } } }
+    }
+  }
+});
+
+// Score Projection Chart
+const overs = {{ overs }};
+const runs  = {{ runs }};
+const predicted = {{ predicted }};
+const labels = ['PP (1-6)', 'Mid (7-12)', 'Death (13-20)', 'Final'];
+const projData = [
+  Math.round(predicted * 0.27),
+  Math.round(predicted * 0.50),
+  Math.round(predicted * 0.82),
+  predicted
+];
+
+new Chart(document.getElementById('scoreChart'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Projected Score',
+        data: projData,
+        borderColor: '#f5c518',
+        backgroundColor: 'rgba(245,197,24,0.1)',
+        tension: 0.4, fill: true,
+        pointRadius: 5, pointBackgroundColor: '#f5c518',
+        borderWidth: 2
+      },
+      {
+        label: 'Current',
+        data: [null, null, runs, null],
+        borderColor: '#2d9e5f',
+        backgroundColor: 'rgba(45,158,95,0.1)',
+        pointRadius: 7, pointBackgroundColor: '#2d9e5f',
+        borderWidth: 0, fill: false,
+        showLine: false
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a90b0', font: { size: 11 } } },
+      x: { grid: { display: false }, ticks: { color: '#7a90b0', font: { size: 10 } } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

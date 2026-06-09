@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPL Score Predictor</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --green:#1a6b3c;
+  --green-light:#2d9e5f;
+  --green-dark:#0d4a2a;
+  --gold:#f5c518;
+  --gold-dark:#d4a017;
+  --bg:#0a1628;
+  --surface:#0f2040;
+  --card:#162a4a;
+  --border:#1e3a5f;
+  --text:#e8edf5;
+  --muted:#7a90b0;
+  --red:#e63946;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(26,107,60,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(245,197,24,0.08) 0%, transparent 50%);
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(135deg, var(--green-dark) 0%, #0a1628 60%);
+  border-bottom:2px solid var(--gold);
+  padding:1.2rem 2rem;
+}
+.header-inner{
+  max-width:1000px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{
+  width:52px;height:52px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;
+  box-shadow:0 4px 15px rgba(245,197,24,0.3);
+}
+.logo h1{
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.6rem;font-weight:700;
+  color:#fff;letter-spacing:1px;
+}
+.logo p{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.header-badge{
+  background:rgba(245,197,24,0.1);
+  border:1px solid rgba(245,197,24,0.4);
+  color:var(--gold);
+  padding:6px 16px;border-radius:20px;
+  font-size:12px;font-weight:600;letter-spacing:1px;
+  font-family:'Rajdhani',sans-serif;
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:3rem 1.5rem 2rem;
+}
+.hero-badge{
+  display:inline-block;
+  background:rgba(26,107,60,0.3);
+  border:1px solid var(--green-light);
+  color:var(--green-light);
+  padding:5px 16px;border-radius:20px;
+  font-size:12px;letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:1rem;
+  font-family:'Rajdhani',sans-serif;
+}
+.hero h2{
+  font-family:'Rajdhani',sans-serif;
+  font-size:clamp(2rem,5vw,3rem);
+  font-weight:700;
+  line-height:1.1;
+  margin-bottom:0.75rem;
+}
+.hero h2 span{color:var(--gold);}
+.hero p{color:var(--muted);font-size:1rem;max-width:500px;margin:0 auto;}
+
+/* MAIN */
+.main{max-width:780px;margin:0 auto;padding:0 1.5rem 3rem;}
+
+/* FORM CARD */
+.form-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:2rem;
+  box-shadow:0 8px 32px rgba(0,0,0,0.3);
+  position:relative;
+  overflow:hidden;
+}
+.form-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--green),var(--gold),var(--green));
+}
+
+.section-title{
+  font-family:'Rajdhani',sans-serif;
+  font-size:1rem;font-weight:600;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:8px;
+}
+.section-title::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,var(--border),transparent);
+}
+
+/* TEAM SELECTOR */
+.team-grid{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:16px;
+  align-items:center;
+  margin-bottom:1.75rem;
+}
+.team-selector{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem;
+  text-align:center;
+}
+.team-selector label{
+  font-size:11px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:1px;
+  display:block;margin-bottom:8px;
+}
+.team-selector select{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--text);
+  font-family:'Rajdhani',sans-serif;
+  font-size:1rem;font-weight:600;
+  text-align:center;
+  outline:none;
+  cursor:pointer;
+}
+.team-selector select option{background:#0f2040;color:#e8edf5;}
+.vs-circle{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--green),var(--green-light));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;font-size:14px;color:#fff;
+  box-shadow:0 4px 12px rgba(26,107,60,0.4);
+  flex-shrink:0;margin:0 auto;
+}
+
+/* STATS GRID */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-bottom:1.75rem;
+}
+.stat-input{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem;
+  transition:border-color 0.2s;
+}
+.stat-input:focus-within{border-color:var(--green-light);}
+.stat-input label{
+  font-size:11px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:1px;
+  display:block;margin-bottom:6px;
+}
+.stat-input input{
+  width:100%;background:transparent;border:none;
+  color:var(--text);font-family:'Rajdhani',sans-serif;
+  font-size:1.4rem;font-weight:700;outline:none;
+}
+.stat-input .hint{
+  font-size:10px;color:var(--muted);margin-top:4px;
+}
+
+/* SUBMIT */
+.btn-predict{
+  width:100%;
+  padding:16px;
+  background:linear-gradient(135deg,var(--green),var(--green-light));
+  color:#fff;border:none;border-radius:12px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.2rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity 0.2s,transform 0.1s;
+  box-shadow:0 4px 15px rgba(26,107,60,0.4);
+}
+.btn-predict:hover{opacity:0.9;}
+.btn-predict:active{transform:scale(0.98);}
+
+/* ERROR */
+.error-box{
+  background:rgba(230,57,70,0.1);
+  border:1px solid var(--red);
+  border-radius:10px;
+  padding:12px 16px;
+  color:var(--red);
+  font-size:14px;
+  margin-bottom:1rem;
+}
+
+/* STATS BAR */
+.stats-bar{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:2rem;
+}
+.stat-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1rem;
+  text-align:center;
+}
+.stat-box .val{
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.8rem;font-weight:700;
+  color:var(--gold);
+}
+.stat-box .lab{
+  font-size:11px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.8px;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  padding:1.5rem;
+  font-size:12px;
+  color:var(--muted);
+  border-top:1px solid var(--border);
+  font-family:'Rajdhani',sans-serif;
+  letter-spacing:1px;
+}
+
+@media(max-width:600px){
+  .team-grid{grid-template-columns:1fr;}
+  .vs-circle{margin:0 auto;}
+  .stats-grid{grid-template-columns:1fr;}
+  .stats-bar{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🏏</div>
+      <div>
+        <h1>IPL PREDICTOR</h1>
+        <p>AI-Powered Score Prediction</p>
+      </div>
+    </div>
+    <div class="header-badge">ML Powered ⚡</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">Machine Learning · Flask · Scikit-learn</div>
+  <h2>Predict the <span>Final Score</span><br>of Any IPL Match</h2>
+  <p>Enter current match conditions and our ML model will predict the final innings score</p>
+</div>
+
+<div class="main">
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="val">3</div>
+      <div class="lab">ML Models</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">8</div>
+      <div class="lab">IPL Teams</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">2008-19</div>
+      <div class="lab">Dataset Years</div>
+    </div>
+  </div>
+
+  <form action="/predict" method="POST">
+    <div class="form-card">
+
+      {% if error %}
+      <div class="error-box">⚠️ {{ error }}</div>
+      {% endif %}
+
+      <!-- Team Selection -->
+      <div class="section-title">Select Teams</div>
+      <div class="team-grid">
+        <div class="team-selector">
+          <label>🏏 Batting Team</label>
+          <select name="bat_team" required>
+            {% for team in teams %}
+            <option value="{{ team }}">{{ team }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="vs-circle">VS</div>
+        <div class="team-selector">
+          <label>🎯 Bowling Team</label>
+          <select name="bowl_team" required>
+            {% for team in teams %}
+            <option value="{{ team }}" {% if loop.index == 2 %}selected{% endif %}>{{ team }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <!-- Match Stats -->
+      <div class="section-title">Current Match Situation</div>
+      <div class="stats-grid">
+        <div class="stat-input">
+          <label>🕐 Overs Completed</label>
+          <input type="number" name="overs" value="10" min="5" max="19" step="0.1" required>
+          <div class="hint">Between 5 and 19</div>
+        </div>
+        <div class="stat-input">
+          <label>🏃 Runs Scored</label>
+          <input type="number" name="runs" value="80" min="0" max="250" required>
+          <div class="hint">Total runs so far</div>
+        </div>
+        <div class="stat-input">
+          <label>❌ Wickets Fallen</label>
+          <input type="number" name="wickets" value="2" min="0" max="9" required>
+          <div class="hint">Between 0 and 9</div>
+        </div>
+        <div class="stat-input">
+          <label>⚡ Runs in Last 5 Overs</label>
+          <input type="number" name="runs_last_5" value="40" min="0" max="120" required>
+          <div class="hint">Recent scoring rate</div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-predict">⚡ Predict Final Score</button>
+
+    </div>
+  </form>
+
+</div>
+
+<div class="footer">
+  IPL Score Predictor · B.Tech CSE (Data Science) · Bennett University · Vasu Singhal
+</div>
+
+</body>
+</html>
