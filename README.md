@@ -15,10 +15,10 @@ A machine learning web application that predicts the final score of an IPL batti
 ## 📸 Screenshots
 
 ### Home Page
-![Home Page](screenshots/home.jpg)
+![Home Page](home.jpg)
 
 ### Prediction Result
-![Result](screenshots/result.jpg)
+![Result](result.jpg)
 
 ---
 
