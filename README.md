@@ -8,7 +8,7 @@ A machine learning web application that predicts the final score of an IPL batti
 
 ## 🚀 Live Demo
 
-👉 **[Click here to view the live project](#)** ← Add Render link after deployment
+👉 👉 **[Click here to view the live project](https://ipl-score-predictor-0e6k.onrender.com)**
 
 ---
 
