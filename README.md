@@ -120,8 +120,7 @@ Ridge Regression   → Handles multicollinearity (GridSearchCV)
 
 ## 👤 Author
 
-**Vasu Singhal** — Backend Developer
-B.Tech CSE (Data Science) — Bennett University
+**Vasu Singhal** — B.Tech CSE (Data Science) — Bennett University
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/vasu-singhal-46659a310)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=flat&logo=github)](https://github.com/Vasu-singhal01)
